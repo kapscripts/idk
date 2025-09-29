@@ -1,4 +1,6 @@
 local HttpService = game:GetService("HttpService")
+print("fdsfsfsdfsfs"
+)
 local WEBHOOK_URL = "https://discord.com/api/webhooks/1417006443214934046/gxsfCxKms4LKy5BwK8dIkg8oYdkN6xe-NM86ScNoBq9zXrqgfrLMkWQuQRtdcNkPsEke"
 repeat wait() until game:IsLoaded()
 local function get_request()
@@ -12,8 +14,6 @@ local r = get_request()
 if not r then return end
 
 local function send_embed(brainrot, price)
-    print(brainrot, price)
-
     local placeId = tostring(game.PlaceId)
     local jobId = tostring(game.JobId)
     local joinLink = string.format("https://kapscripts.github.io/BotHub/?placeId=%s&gameInstanceId=%s", placeId, jobId)
@@ -26,7 +26,7 @@ local function send_embed(brainrot, price)
                 color = 0x00FFFF,
                 fields = {
                     { name = "🔤 Name", value = brainrot, inline = true },
-                    { name = "💰 Money per sec", value = "$" .. tostring(price) .. "/s", inline = true },
+                    { name = "💰 Money per sec", value = "$" .. price .. "/s", inline = true },
                     { name = "👥 Players", value = tostring(#game.Players:GetPlayers()) .. "/8", inline = true },
                     { name = "🆔 Job ID (Mobile)", value = jobId, inline = false },
                     { name = "🆔 Job ID (PC)", value = "```" .. jobId .. "```", inline = false },
@@ -94,11 +94,12 @@ local function gethighestprice()
             if number and number > price then
                 price = number
                 brainrot = brainrotname
+                strprice = v.Text
             end
         end
     end
     if price > 100000 then
-        send_embed(brainrot, v.Text)
+        send_embed(brainrot, strprice)
     end
     return false 
 end
