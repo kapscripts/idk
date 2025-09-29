@@ -11,10 +11,6 @@ end
 local r = get_request()
 if not r then return end
 
--- Store current server to avoid rejoining
-local currentJobId = game.JobId
-local checkedServers = {}
-
 local function send_embed(brainrot, price)
     print(brainrot, price)
 
@@ -77,10 +73,6 @@ end
 local plr = game.Players.LocalPlayer
 local plots = workspace:WaitForChild("Plots")
 
--- Wait for game to fully load
-wait(8)
-print("🔍 Checking server for high-value brainrot...")
-
 local function getlocalbase(plr)
     for i,v in plots:GetDescendants() do 
         if v.Name == "TextLabel" then
@@ -105,20 +97,20 @@ local function gethighestprice()
             end
         end
     end
-    if price > 1000000 then
+    if price > 100000 then
         send_embed(brainrot, price)
-        return true -- Found high value
+        
     end
-    return false -- No high value found
+    return false 
 end
 
 -- Check for high-value brainrot
 local foundHighValue = gethighestprice()
 
 -- Only server hop if we didn't find anything good
-if not foundHighValue then
-    print("❌ No high-value brainrot found, hopping to a different server...")
-    wait(2)
+if not foundHighValue or foundHighValue then
+    print("No high-value brainrot found, hopping servers...")
+    wait(3)
     
     local Players = game:GetService("Players")
     local TeleportService = game:GetService("TeleportService")
@@ -131,33 +123,10 @@ if not foundHighValue then
     
     persist(string.format([[loadstring(game:HttpGet('%s'))()]], "https://raw.githubusercontent.com/kapscripts/idk/refs/heads/main/rejoiner2"))
     
-    -- Get list of servers and join a different one
-    local success, servers = pcall(function()
-        local response = r({
-            Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100", PLACE_ID),
-            Method = "GET"
-        })
-        return HttpService:JSONDecode(response.Body)
-    end)
-    
-    if success and servers and servers.data then
-        -- Find a server that isn't the current one
-        for _, server in ipairs(servers.data) do
-            if server.id ~= currentJobId and server.playing < server.maxPlayers then
-                print("🔄 Joining server:", server.id)
-                pcall(function()
-                    TeleportService:TeleportToPlaceInstance(PLACE_ID, server.id, Players.LocalPlayer)
-                end)
-                return
-            end
-        end
-    end
-    
-    -- Fallback: Use regular Teleport if server list fails
-    print("⚠️ Server list failed, using random teleport")
+    -- Teleport to a random server instead of the same one
     pcall(function()
         TeleportService:Teleport(PLACE_ID, Players.LocalPlayer)
     end)
 else
-    print("✅ Found high-value brainrot! Staying in this server.")
+    print("Found high-value brainrot! Staying in this server.")
 end
