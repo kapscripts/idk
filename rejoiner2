@@ -75,15 +75,15 @@ local plots = workspace:WaitForChild("Plots")
 
 local function getlocalbase(plr)
     for i,v in plots:GetDescendants() do 
-        if v.Name == "TextLabel" then
+        if v.Name == "TextLabel" and v.Text then
             if v.Text:find(game.Players.LocalPlayer.Name) then
                 return v.Parent.Parent.Parent.Parent
             end
         end
     end
 end
+local localplot = getlocalbase(plr)
 
-local localplot = getlocalbase(plr) or nil
 
 local function gethighestprice()
     local price, brainrot = 0, nil
