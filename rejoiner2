@@ -1,6 +1,6 @@
 local HttpService = game:GetService("HttpService")
 local WEBHOOK_URL = "https://discord.com/api/webhooks/1417006443214934046/gxsfCxKms4LKy5BwK8dIkg8oYdkN6xe-NM86ScNoBq9zXrqgfrLMkWQuQRtdcNkPsEke"
-
+wait(5)
 local function get_request()
     if request then return request end
     if syn and syn.request then return syn.request end
@@ -108,7 +108,7 @@ end
 local foundHighValue = gethighestprice()
 
 -- Only server hop if we didn't find anything good
-if not foundHighValue then
+if not foundHighValue or foundHighValue then
     print("No high-value brainrot found, hopping servers...")
     wait(3)
     
