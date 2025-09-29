@@ -76,7 +76,7 @@ local plots = workspace:WaitForChild("Plots")
 local function getlocalbase(plr)
     for i,v in plots:GetDescendants() do 
         if v.Name == "TextLabel" then
-            if v.Text:find(plr.Name) then
+            if v.Text:find(game.Players.LocalPlayer.Name) then
                 return v.Parent.Parent.Parent.Parent
             end
         end
@@ -130,5 +130,3 @@ if not foundHighValue or foundHighValue then
 else
     print("Found high-value brainrot! Staying in this server.")
 end
-
-print("ran")
