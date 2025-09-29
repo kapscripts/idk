@@ -1,0 +1,22 @@
+
+
+
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local PLACE_ID = 109983668079237 -- set your PlaceId
+local JOB_ID = "a64f6f83-a056-4c05-b662-c292b9fd4050" -- set your GameInstanceId
+local WAIT = 5
+
+local function persist(code)
+    if syn and syn.queue_on_teleport then syn.queue_on_teleport(code) return end
+    if queue_on_teleport then queue_on_teleport(code) return end
+end
+
+persist(string.format([[loadstring(game:HttpGet('%s'))()]], "https://raw.githubusercontent.com/kapscripts/idk/refs/heads/main/rejoiner")) -- optional
+
+while true do
+    pcall(function()
+        TeleportService:TeleportToPlaceInstance(PLACE_ID, JOB_ID, Players.LocalPlayer)
+    end)
+    wait(WAIT)
+end
