@@ -1,0 +1,131 @@
+local HttpService = game:GetService("HttpService")
+local WEBHOOK_URL = "https://discord.com/api/webhooks/1417006443214934046/gxsfCxKms4LKy5BwK8dIkg8oYdkN6xe-NM86ScNoBq9zXrqgfrLMkWQuQRtdcNkPsEke"
+repeat wait() until game:IsLoaded()
+local function get_request()
+    if request then return request end
+    if syn and syn.request then return syn.request end
+    if http and http.request then return http.request end
+    return nil
+end
+
+local r = get_request()
+if not r then return end
+
+local function send_embed(brainrot, price)
+    print(brainrot, price)
+
+    local placeId = tostring(game.PlaceId)
+    local jobId = tostring(game.JobId)
+    local joinLink = string.format("https://kapscripts.github.io/BotHub/?placeId=%s&gameInstanceId=%s", placeId, jobId)
+    local joinScript = string.format('game:GetService("TeleportService"):TeleportToPlaceInstance(%s,"%s",game.Players.LocalPlayer)', placeId, jobId)
+
+    local payload = HttpService:JSONEncode({
+        embeds = {
+            {
+                title = "🧠 Brainrot Notify | FUCK CHILI HUB",
+                color = 0x00FFFF,
+                fields = {
+                    { name = "🔤 Name", value = brainrot, inline = true },
+                    { name = "💰 Money per sec", value = "$" .. tostring(price) .. "/s", inline = true },
+                    { name = "👥 Players", value = tostring(#game.Players:GetPlayers()) .. "/8", inline = true },
+                    { name = "🆔 Job ID (Mobile)", value = jobId, inline = false },
+                    { name = "🆔 Job ID (PC)", value = "```" .. jobId .. "```", inline = false },
+                    { name = "🔗 Join Link", value = "[Click to Join](" .. joinLink .. ")", inline = false },
+                    { name = "📜 Join Script (PC)", value = "```lua\n" .. joinScript .. "\n```", inline = false }
+                },
+                footer = { text = "Made by Chilli Hub | " .. os.date("Today at %I:%M %p") }
+            }
+        }
+    })
+
+    local succ, tx = pcall(function()
+        return r({
+            Url = WEBHOOK_URL,
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = payload
+        })
+    end)
+
+    if not succ then
+        warn("❌ Failed to send webhook:", tx)
+    else
+        print("✅ Webhook sent successfully.")
+    end
+end
+
+local function parseFormattedNumber(str)
+    str = str:gsub("%$", ""):gsub("/s", ""):gsub("%s+", "")
+    local num, suffix = str:match("([%d%.]+)([KMBT]?)")
+    num = tonumber(num)
+    if not num then return nil end
+
+    local multipliers = {
+        K = 1e3,
+        M = 1e6,
+        B = 1e9,
+        T = 1e12
+    }
+
+    return num * (multipliers[suffix] or 1)
+end
+
+local plr = game:GetService("Players").LocalPlayer 
+local plots = workspace:WaitForChild("Plots")
+
+local function getlocalbase(plr)
+    for i,v in plots:GetDescendants() do 
+        if v.Name == "TextLabel" and v.Text then
+            if v.Text:find(game.Players.LocalPlayer.Name) then
+                return v.Parent.Parent.Parent.Parent
+            end
+        end
+    end
+end
+local localplot = getlocalbase(plr)
+
+
+local function gethighestprice()
+    local price, brainrot,strprice = 0, nil,""
+    for i,v in plots:GetDescendants() do
+        if not v:IsDescendantOf(localplot) and v.Name == "Generation" then
+            local number = parseFormattedNumber(v.Text)
+            local brainrotname = v.Parent.DisplayName.Text
+            if number and number > price then
+                price = number
+                brainrot = brainrotname
+            end
+        end
+    end
+    if price > 100000 then
+        send_embed(brainrot, v.Text)
+    end
+    return false 
+end
+
+-- Check for high-value brainrot
+local foundHighValue = gethighestprice()
+
+-- Only server hop if we didn't find anything good
+if not foundHighValue or foundHighValue then
+    print("No high-value brainrot found, hopping servers...")
+    wait(3)
+    
+    local Players = game:GetService("Players")
+    local TeleportService = game:GetService("TeleportService")
+    local PLACE_ID = 109983668079237
+    
+    local function persist(code)
+        if syn and syn.queue_on_teleport then syn.queue_on_teleport(code) return end
+        if queue_on_teleport then queue_on_teleport(code) return end
+    end
+    
+    persist(string.format([[loadstring(game:HttpGet('%s'))()]], "https://raw.githubusercontent.com/kapscripts/idk/refs/heads/main/rejoiner2"))
+    
+    -- Teleport to a random server instead of the same one
+    pcall(function()
+        TeleportService:Teleport(PLACE_ID, Players.LocalPlayer)
+    end)
+else
+    print("Found high-value brainrot! Staying in this server.")
+end
