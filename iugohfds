@@ -195,10 +195,8 @@ end
 -- Main logic
 local foundHighValue = gethighestprice()
 
-if foundHighValue then
+if foundHighValue or not foundHighValue then
     print("✅ Found high-value brainrot! Staying in this server.")
-else
-    print("❌ No high-value brainrot found, hopping servers...")
     wait(2)
     
     persist(string.format([[loadstring(game:HttpGet('%s'))()]], "https://raw.githubusercontent.com/kapscripts/idk/refs/heads/main/iugohfds"))
