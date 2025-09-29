@@ -1,4 +1,5 @@
 local HttpService = game:GetService("HttpService")
+print("new")
 local WEBHOOK_URL = "https://discord.com/api/webhooks/1417006443214934046/gxsfCxKms4LKy5BwK8dIkg8oYdkN6xe-NM86ScNoBq9zXrqgfrLMkWQuQRtdcNkPsEke"
 repeat wait() until game:IsLoaded()
 local function get_request()
