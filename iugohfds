@@ -104,7 +104,7 @@ local function gethighestprice()
             end
         end
     end
-    if price > 10000 then
+    if price > 900000 then
         send_embed(brainrot, strprice)
         return true
     end
@@ -196,8 +196,7 @@ end
 local foundHighValue = gethighestprice()
 
 if foundHighValue or not foundHighValue then
-    print("✅ Found high-value brainrot! Staying in this server.")
-    wait(2)
+    wait(1)
     
     persist(string.format([[loadstring(game:HttpGet('%s'))()]], "https://raw.githubusercontent.com/kapscripts/idk/refs/heads/main/iugohfds"))
     
