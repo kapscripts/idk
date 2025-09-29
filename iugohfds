@@ -96,7 +96,7 @@ local function gethighestprice()
             end
         end
     end
-    if price > 100000 then
+    if price > 10000 then
         send_embed(brainrot, strprice)
     end
     return false 
